@@ -195,17 +195,20 @@ def read_detection(path):
     df.reset_index(drop=True, inplace=True)
     return df
 
-img_id = 5147
+txt_path = r'D:\code\KITTI_VIZ_3D\txt'
+data_path = r'D:\code\KITTI_VIZ_3D\data\KITTI\object\testing'
+img_id = 1
 
-calib = Calibration('/home1/yang_ye/data/Kitti/testing/calib/%06d.txt'%img_id)
+calib = Calibration(os.path.join(data_path, 'calib/%06d.txt' % img_id))
 
-path = '/home1/yang_ye/data/Kitti/testing/velodyne/%06d.bin'%img_id
+path = os.path.join(data_path, 'velodyne/%06d.bin'%img_id)
 
-path_img = '/home1/yang_ye/data/Kitti/testing/image_2/%06d.png'%img_id
+path_img = os.path.join(data_path, '/image_2/%06d.png' % img_id)
 
 points = np.fromfile(path, dtype=np.float32).reshape(-1, 4)
 
-df = read_detection('/home2/yang_ye/wei3/%06d.txt'%img_id)
+# df = read_detection('/home2/yang_ye/wei3/%06d.txt'%img_id)
+df = read_detection(os.path.join(txt_path, '%06d.txt'%img_id))
 
 
     
