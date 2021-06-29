@@ -18,7 +18,8 @@ import cv2
 def read_detection(path):
     df = pd.read_csv(path, header=None, sep=' ')
     df.columns = ['type', 'truncated', 'occluded', 'alpha', 'bbox_left', 'bbox_top',
-                  'bbox_right', 'bbox_bottom', 'width', 'height', 'length', 'pos_x', 'pos_y', 'pos_z', 'rot_y', 'score']
+                  'bbox_right', 'bbox_bottom', 'width', 'height', 'length', 'pos_x', 'pos_y', 'pos_z', 'rot_y']
+                  # 'bbox_right', 'bbox_bottom', 'width', 'height', 'length', 'pos_x', 'pos_y', 'pos_z', 'rot_y', 'score']
     #     df.loc[df.type.isin(['Truck', 'Van', 'Tram']), 'type'] = 'Car'
     #     df = df[df.type.isin(['Car', 'Pedestrian', 'Cyclist'])]
     #    df = df[df['type']=='Car']
@@ -27,15 +28,16 @@ def read_detection(path):
     return df
 
 
-txt_path = r'D:\code\KITTI_VIZ_3D\txt'
-data_path = r'D:\code\KITTI_VIZ_3D\data\KITTI\object\testing'
+root_path = os.getcwd()  # 获取根目录
+lable_path = os.path.join(root_path, r'data/KITTI/object/training/label_2')
+data_path = os.path.join(root_path, r'data/KITTI/object/testing')
 img_id = 1
 
 path = os.path.join(data_path, 'velodyne/%06d.bin' % img_id)
 
 points = np.fromfile(path, dtype=np.float32).reshape(-1, 4)
 
-df = read_detection(os.path.join(txt_path, '%06d.txt' % img_id))
+df = read_detection(os.path.join(lable_path, '%06d.txt' % img_id))
 
 print(df)
 
@@ -105,7 +107,7 @@ for o in range(len(df)):
 
     # n1,n2, m1,m2, l1,l2 = (x11+x22)/2,(x33+x44)/2, (y11+y22)/2, (y33+y44)/2, (z11+z22)/2, (z33+z44)/2
     n1, n2, m1, m2, l1, l2 = (x11 + x22) / 2, (x33 + x44) / 2, (y1 + y2) / 2, (y3 + y4) / 2, (z11 + z22) / 2, (
-                z33 + z44) / 2
+            z33 + z44) / 2
     #################
     save_points_center = compute_3D_line_(n1, n2, m1, m2, l1, l2)
     #################
